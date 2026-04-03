@@ -1938,22 +1938,25 @@ function updateMaster(){
   const finalI=traj.i[traj.i.length-1];
   const beps=eps*beta;
 
-  document.getElementById('m-cross-val').textContent=crossT!==null?'t = '+crossT:'> 100';
+  document.getElementById('m-cross-val').textContent = i0<1 ? 'already < 1' : (crossT!==null?'t = '+crossT:'> 100');
   document.getElementById('m-final-val').textContent=finalI.toFixed(3);
   document.getElementById('m-beps-val').textContent=beps.toFixed(3);
 
-  const mclass=crossT!==null?'m-stable':'m-unstable';
+  const mclass = i0<1 ? 'm-stable' : (crossT!==null?'m-stable':'m-unstable');
   ['m-m1','m-m2','m-m3'].forEach(id=>document.getElementById(id).className='metric '+mclass);
-  const vclass=crossT!==null?'v-stable':'v-unstable';
+  const vclass = i0<1 ? 'v-stable' : (crossT!==null?'v-stable':'v-unstable');
   ['m-cross-val','m-final-val','m-beps-val'].forEach(id=>document.getElementById(id).className='metric-val '+vclass);
 
   const ins=document.getElementById('m-insight');
-  if(crossT!==null){
+  if(i0<1){
     ins.className='insight';
-    ins.textContent=`With β_service = ${beta.toFixed(2)} and ε = ${eps.toFixed(2)}, the i-factor crosses the bifurcation threshold at t ≈ ${crossT}. The service network driving force ε × φ × β = ${beps.toFixed(3)} is sufficient to pull competition into cooperation. Final i = ${finalI.toFixed(3)} — deep inside the cooperative attractor.`;
+    ins.textContent=`i₀ = ${i0.toFixed(2)} — the system is already inside the cooperative basin (i < 1.0). No threshold crossing is needed. The perpetuity-compatibility product ε × φ × β = ${beps.toFixed(3)} continues to pull i deeper into the cooperative attractor toward the asymptotic floor of ${(i0*(1-beta)).toFixed(3)}. The system is stable — perturbations decay back to coexistence equilibrium E*.`;
+  } else if(crossT!==null){
+    ins.className='insight';
+    ins.textContent=`With β_service = ${beta.toFixed(2)} and ε = ${eps.toFixed(2)}, the i-factor crosses the bifurcation threshold at t ≈ ${crossT}. The perpetuity-compatibility product ε × φ × β = ${beps.toFixed(3)} is sufficient to pull the system from the competitive basin into the cooperative attractor. Final i = ${finalI.toFixed(3)}.`;
   } else {
     ins.className='insight i-unstable';
-    ins.textContent=`The driving force ε × β = ${beps.toFixed(3)} is insufficient to cross the bifurcation threshold within 100 generations. The system remains competitive. To enable cooperation, increase β_service (denser service network) or ε (faster evolution). β_service ≥ ${(0.08/eps).toFixed(2)} would achieve crossing.`;
+    ins.textContent=`The perpetuity-compatibility product ε × β = ${beps.toFixed(3)} is insufficient to cross the bifurcation threshold within 100 generations. The asymptotic floor i₀ × (1 − β) = ${(i0*(1-beta)).toFixed(3)} remains above 1.0 — the service network cannot pull the system over the saddle. Increase β_service (denser, more complementary service network) or lower i₀.`;
   }
 
   if(!trajChartInst) return;
