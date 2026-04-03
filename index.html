@@ -876,13 +876,13 @@ footer {
   <div class="mod-header">
     <div class="mod-tag">Master Equation — Service Network Coupling</div>
     <h2 class="mod-title">i₁₂(t) = i⁰₁₂ × (1 − ε × φ(t) × β(t))</h2>
-    <p class="mod-desc">The master equation describes how the i-factor evolves over time. Service networks (Ω-matrix, R² = 0.9248) drive β(t), which — amplified by evolutionary rate ε and cooperative capacity φ(t) — pulls i below the bifurcation threshold of 1.0. Adjust the parameters to see how fast and how far cooperation can grow.</p>
+    <p class="mod-desc">The master equation describes how the i-factor evolves over time. Service networks (Ω-matrix, R² = 0.9248) drive β(t), which — amplified by evolutionary rate ε and perpetuity φ(t) — pulls i below the bifurcation threshold of 1.0. Perpetuity is a species-centric measure of adaptive maturity: how far a species has progressed along its evolutionary trajectory toward optimal survival and reproduction within its current β-context.</p>
   </div>
 
   <div class="master-eq">
     <div class="eq-main">i<sub>12</sub>(t) = i⁰<sub>12</sub> × (1 − <span class="eq-amber">ε</span> × <span class="eq-green">φ(t)</span> × <span class="eq-red">β(t)</span>)</div>
     <div class="eq-sub">
-      i⁰₁₂ = initial interaction coefficient &nbsp;|&nbsp; <span class="eq-amber">ε</span> = evolutionary rate &nbsp;|&nbsp; <span class="eq-green">φ(t)</span> = cooperative capacity &nbsp;|&nbsp; <span class="eq-red">β(t)</span> = service network suitability
+      i⁰₁₂ = initial interaction coefficient &nbsp;|&nbsp; <span class="eq-amber">ε</span> = evolutionary rate &nbsp;|&nbsp; <span class="eq-green">φ(t)</span> = perpetuity (evolutionary optimisation maturity) &nbsp;|&nbsp; <span class="eq-red">β(t)</span> = compatibility (service network suitability)
     </div>
   </div>
 
@@ -902,7 +902,7 @@ footer {
     <span class="ctrl-val" id="m-beta-val">0.55</span>
   </div>
   <div class="control-row">
-    <span class="ctrl-label">φ₀ <span>(initial cooperative capacity)</span></span>
+    <span class="ctrl-label">φ₀ <span>(initial perpetuity)</span></span>
     <input type="range" id="m-phi0" min="0.05" max="0.5" step="0.01" value="0.15">
     <span class="ctrl-val" id="m-phi0-val">0.15</span>
   </div>
@@ -941,7 +941,7 @@ footer {
 
   <div id="m-tab-phi" class="tab-panel">
     <div class="chart-wrap" style="height:300px"><canvas id="m-phiChart"></canvas></div>
-    <p class="prose" style="margin-top:0.8rem;font-size:12.5px;">φ(t) represents accumulated cooperative capacity — it grows logistically, starting slow then accelerating, then saturating near 1.0. Higher initial φ₀ shortens the lag phase before cooperation takes hold. The product ε × φ(t) × β_service(t) determines the rate of i-factor decline.</p>
+    <p class="prose" style="margin-top:0.8rem;font-size:12.5px;">φ(t) is perpetuity — the species-centric measure of adaptive maturity achieved through evolutionary optimisation over time. It starts near zero when a species first encounters an environment and increases toward 1.0 as evolutionary optimisation completes. It is a slow state variable: τ_φ >> τ_interaction, meaning perpetuity accumulates over generations while interaction costs fluctuate rapidly. Note that high φ does not guarantee cooperation — the Argentine ant (φ ≈ 1.0) is superbly optimised yet invasive. It is the product φ(t) × β(t) — perpetuity times compatibility — that drives i below the bifurcation threshold.</p>
   </div>
 
   <div id="m-tab-service" class="tab-panel">
@@ -1232,10 +1232,10 @@ i₁₂(t) = i⁰₁₂ × (1 − <span class="a">ε</span> × <span class="g">�
 <span class="c">where:</span>
 i⁰₁₂     = initial interaction coefficient (at time t = 0)
 <span class="a">ε</span>        = evolutionary rate (speed at which i can change per generation)
-<span class="g">φ(t)</span>     = cooperative capacity (accumulated ability to sustain mutualism)
+<span class="g">φ(t)</span>     = perpetuity (evolutionary optimisation maturity within β-context)
 <span class="r">β(t)</span>     = service network suitability (driven by the Ω-matrix eigenvalue)
       </div>
-      <p>The three terms in the product have distinct biological meanings. <strong>ε</strong> captures how fast evolutionary change can occur — a species with short generation times and high genetic variation has higher ε. <strong>φ(t)</strong> is a logistic function representing accumulated cooperative infrastructure: mutualistic behaviour takes time to become reliable, and the rate of increase in φ depends on φ itself (early cooperation reinforces further cooperation). <strong>β(t)</strong> is the thermodynamic driver: it is set by the eigenstructure of the service exchange network (Ω-matrix), and it determines how far the service network can pull i below its initial value.</p>
+      <p>The three terms in the product have distinct biological meanings. <strong>ε</strong> captures how fast evolutionary change can occur — a species with short generation times and high genetic variation has higher ε. <strong>φ(t)</strong> is perpetuity: the species-centric measure of adaptive maturity achieved through evolutionary optimisation over time. It is a slow state variable that accumulates over generations, tracking how far a species has progressed toward optimal survival and reproduction within its current β-context. Critically, high φ does not by itself predict cooperation — the Argentine ant has φ ≈ 1.0 (superbly optimised) yet drives competitive exclusion because β is low. It is the product φ(t) × β(t) jointly that drives i toward the cooperative basin. <strong>β(t)</strong> is compatibility: set by the eigenstructure of the service exchange network (Ω-matrix), it determines the asymptotic floor to which i can be pulled and how far the system can penetrate the cooperative attractor.</p>
 
       <h3>4.3 The Ω-matrix and service network suitability</h3>
       <p>The Ω-matrix encodes the directed graph of service exchange between species. Entry Ω_ij represents the fitness benefit that species j provides to species i per unit of activity. The dominant eigenvalue λ_max(Ω) captures the maximum sustainable rate of cooperative service flow through the network.</p>
@@ -1882,7 +1882,7 @@ function buildMasterCharts(){
       plugins:{legend:{display:false}},
       scales:{
         x:{title:{display:true,text:'Time (generations)',color:'#8fa08a',font:{size:11}},ticks:{color:'#526050',maxTicksLimit:12},grid:{color:'rgba(120,180,120,0.07)'}},
-        y:{title:{display:true,text:'φ(t) — cooperative capacity',color:'#8fa08a',font:{size:11}},min:0,max:1.05,ticks:{color:'#526050'},grid:{color:'rgba(120,180,120,0.07)'}}
+        y:{title:{display:true,text:'φ(t) — perpetuity (evolutionary maturity)',color:'#8fa08a',font:{size:11}},min:0,max:1.05,ticks:{color:'#526050'},grid:{color:'rgba(120,180,120,0.07)'}}
       }
     }
   });
@@ -1909,7 +1909,7 @@ function buildMasterCharts(){
   // Sensitivity chart
   sensChartInst=new Chart(ctxSens,{
     type:'bar',
-    data:{labels:['β_service','ε (evol. rate)','φ₀ (initial cap.)','i⁰ (initial i)'],
+    data:{labels:['β_service','ε (evol. rate)','φ₀ (initial perpetuity)','i⁰ (initial i)'],
       datasets:[{label:'Sensitivity (Δt per unit)',data:[0,0,0,0],backgroundColor:['rgba(92,202,122,0.5)','rgba(55,138,221,0.5)','rgba(212,168,67,0.4)','rgba(232,92,92,0.4)'],borderColor:['#5cca7a','#378ADD','#d4a843','#e85c5c'],borderWidth:1}]},
     options:{responsive:true,maintainAspectRatio:false,animation:{duration:300},indexAxis:'y',
       plugins:{legend:{display:false}},
